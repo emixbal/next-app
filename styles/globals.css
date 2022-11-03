@@ -19,6 +19,7 @@ a {
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
@@ -34,6 +35,7 @@ a {
 .site-layout .site-layout-background {
   background: #fff;
 }
-  [data-theme="dark"] .site-layout .site-layout-background {
-    background: #141414;
-  }
+
+[data-theme="dark"] .site-layout .site-layout-background {
+  background: #141414;
+}

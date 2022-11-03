@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Head from 'next/head'
 import 'antd/dist/antd.css';
 import {
   DesktopOutlined,
@@ -40,28 +41,47 @@ const items = [
 const App = (props) => {
   const { children } = props
   const [collapsed, setCollapsed] = useState(false);
+  const [paths, setPaths] = useState([]);
+
+  useEffect(() => {
+    var paths = window.location.pathname.split('/').filter(function (value) {
+      return value != "";
+    });
+
+    setPaths(paths)
+  }, [])
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
-        <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-      </Sider>
-      <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }} />
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            <main>
-              {children}
-            </main>
-          </div>
-        </Content>
+    <>
+      <Head>
+        <title>Next Gen App</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
+          <div className="logo" />
+          <Menu theme="dark" defaultSelectedKeys={['2']} mode="inline" items={items} />
+        </Sider>
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }} />
+          <Content style={{ margin: '0 16px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              {
+                paths.map((item, index) => {
+                  return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
+                })
+              }
+            </Breadcrumb>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              <main>
+                {children}
+              </main>
+            </div>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
+
   );
 };
 
