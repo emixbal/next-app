@@ -1,42 +1,13 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head'
-import 'antd/dist/antd.css';
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { useRouter } from 'next/router'
+
 import { Breadcrumb, Layout, Menu } from 'antd';
 
+import 'antd/dist/antd.css';
+import { items } from "../router";
+
 const { Header, Content, Sider } = Layout;
-
-function getItem(
-  label,
-  key,
-  icon,
-  children,
-) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
-];
 
 const App = (props) => {
   const { children } = props
@@ -44,12 +15,19 @@ const App = (props) => {
   const [paths, setPaths] = useState([]);
 
   useEffect(() => {
+    console.log(items);
     var paths = window.location.pathname.split('/').filter(function (value) {
       return value != "";
     });
 
     setPaths(paths)
   }, [])
+
+  const router = useRouter()
+
+  const handleMenuNavigate = (selectedKeys)=>{
+    router.replace(`/${selectedKeys}`)
+  }
 
   return (
     <>
@@ -60,7 +38,7 @@ const App = (props) => {
       <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
           <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['2']} mode="inline" items={items} />
+          <Menu theme="dark" defaultSelectedKeys={['2']} mode="inline" items={items} onSelect={({ selectedKeys }) => handleMenuNavigate(selectedKeys)}></Menu>
         </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
